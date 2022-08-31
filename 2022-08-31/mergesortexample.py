@@ -1,5 +1,7 @@
 """
-WARNING ... SPOILER ... 
+1. WARNING ... SPOILER ...
+2. Try to write a version that is inplace
+3. Do quicksort
 """
 
 import random
