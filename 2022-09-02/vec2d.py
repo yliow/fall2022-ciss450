@@ -19,7 +19,32 @@ class vec2d:
         self.__y = y
     y = property(get_y, set_y)
 
+    def __add__(self, v):
+        ret = vec2d(self.__x + v.__x, self.__y + v.__y)
+        return ret
+
+    def __len__(self):
+        return 2
+
+    # += is __iadd__
+    
 v = vec2d(1, 2)
 print(v)
 v.x = 42
 print(v.x)
+u = vec2d(7, 1)
+print("u:", u)
+w = v + u
+print("w:", w)
+print("len(w):", len(w))
+
+
+class P:
+    def __init__(self, x):
+        self.x = x
+
+class C(P):
+    def __init__(self, x, y):
+        P.__init__(self, x)
+        self.y = y
+        
