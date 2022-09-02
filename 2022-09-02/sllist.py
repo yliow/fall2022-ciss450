@@ -45,10 +45,20 @@ for x in range(10):
     sllist.delete_head()
     print(head, sllist)
 
+sllist = SLList()
+for x in range(10):
+    sllist.insert_head(list(range(x)))
+    print(sllist)
+for x in range(10):
+    head = sllist.head
+    sllist.delete_head()
+    print(head, sllist)
+
 # To check for memory leaks, run this program and in another shell run
 # 'top' and check the %MEM for memory usage. If there's a memory leak the
 # value of %MEM will grow.
+input("enter to start mem leaks test ...")
 while 1:
     sllist = SLList()
-    for x in range(1000):
+    for x in range(1000000):
         sllist.insert_head(x)
