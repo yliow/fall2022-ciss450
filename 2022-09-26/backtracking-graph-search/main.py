@@ -71,8 +71,14 @@ mat = [[0 for c in range(n)] for r in range(n)]
 for i,(r,c) in enumerate(solution):
     mat[r][c] = i
 
+for c in range(n):
+    print("+--", end='')
+print("+")
 for row in mat:
     print("|", end='')
     for c in row:
         print("%2s|" % c, end='')
     print()
+    for c in range(n):
+        print("+--", end='')
+    print("+")
