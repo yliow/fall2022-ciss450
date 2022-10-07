@@ -48,12 +48,21 @@ def f(state, player):
             ret = -1
             for action, successor in action_successors:
                 v = f(successor, opponent(player))
+                if v > ret:
+                    ret = v
         else: # 'MIN'
-            pass
+            ret = 20
+            for action, successor in action_successors:
+                v = f(successor, opponent(player))
+                if v < ret:
+                    ret = v
+        print("f ... state, player:", state, player,
+              "... rec case ... returning", ret )
+        return ret
         
-print(successors("A"))
-print(terminal_test("A"), terminal_test("G"))
-print(utility("G"))
+#print(successors("A"))
+#print(terminal_test("A"), terminal_test("G"))
+#print(utility("G"))
 
 val = f('A', 'MAX')
 print("final:", val)
