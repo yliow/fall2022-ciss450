@@ -25,13 +25,30 @@ def utility(state):
              'M':2,
     }[state])
 
+def opponent(player):
+    if player == 'MAX': return 'MIN'
+    else: return 'MAX'
+    
 def f(state, player):
     """
     player must be in ['MAX', 'MIN']
     return the "best" utility value base on player 
     """
-    pass
-
+    print("f ... state, player:", state, player)
+    if terminal_test(state):
+        # base case
+        ret = utility(state)
+        print("f ... state, player:", state, player,
+              "... base case ... returning", ret )
+        return ret
+    else:
+        # recursive case
+        action_successors = successors(state)
+        if player == 'MAX':
+            ret = -1
+            for action, successor in action_successors:
+                v = f(successor, opponent(player))
+        else: # 'MIN'
 print(successors("A"))
 print(terminal_test("A"), terminal_test("G"))
 print(utility("G"))
