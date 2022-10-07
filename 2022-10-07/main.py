@@ -8,6 +8,8 @@ def successors(state):
     elif state == 'B':
         return [('b1', 'E'), ('b2', 'F'), ('b3', 'G')]
     elif state == 'C':
+        return [('c1', 'H'), ('c2', 'I'), ('c3', 'J')]
+    elif state == 'D':
         return [('d1', 'K'), ('d2', 'L'), ('d3', 'M')]
 
 def terminal_test(state):
