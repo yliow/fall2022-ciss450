@@ -31,3 +31,10 @@ def f(state, player):
     return the "best" utility value base on player 
     """
     pass
+
+print(successors("A"))
+print(terminal_test("A"), terminal_test("G"))
+print(utility("G"))
+
+val = f('A', 'MAX')
+print("final:", val)
