@@ -31,9 +31,10 @@ def opponent(player):
     if player == 'MAX': return 'MIN'
     else: return 'MAX'
     
-def f(state, player):
+def f(state, player, check):
     """
     player must be in ['MAX', 'MIN']
+    check ... 
     return the "best" utility value base on player 
     """
     print("f ... state, player:", state, player)
@@ -49,15 +50,17 @@ def f(state, player):
         if player == 'MAX':
             ret = -1
             for action, successor in action_successors:
-                v = f(successor, opponent(player))
-                if v > ret:
-                    ret = v
+                v = f(successor, opponent(player), ret)
+                if v > ret: ret = v
         else: # 'MIN'
+            # check?
             ret = 20
             for action, successor in action_successors:
-                v = f(successor, opponent(player))
+                v = f(successor, opponent(player), ret)
                 if v < ret:
                     ret = v
+                    if ret < check: break
+                    
         print("f ... state, player:", state, player,
               "... rec case ... returning", ret )
         return ret
