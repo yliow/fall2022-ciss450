@@ -49,6 +49,8 @@ def f(state, player):
             for action, successor in action_successors:
                 v = f(successor, opponent(player))
         else: # 'MIN'
+            pass
+        
 print(successors("A"))
 print(terminal_test("A"), terminal_test("G"))
 print(utility("G"))
