@@ -69,5 +69,5 @@ def f(state, player, check):
 #print(terminal_test("A"), terminal_test("G"))
 #print(utility("G"))
 
-val = f('A', 'MAX')
+val = f('A', 'MAX', None)
 print("final:", val)
