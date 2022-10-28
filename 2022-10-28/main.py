@@ -71,7 +71,7 @@ def ok(constraints, assignments):
             else:
                 pass
         try:
-            result = eval(c)
+            result = eval(c) # NameError is raised if expression contains a var
             if not result:
                 return False
         except NameError:
@@ -80,7 +80,8 @@ def ok(constraints, assignments):
 
 
 '''
-bt for csp. not a csp solver - not optimized to take advantage of csp structure.
+simple bt for csp.
+not a csp solver - not optimized to take advantage of csp structure.
 '''
 def bt(csp, assignments):
     if len(csp.V) == len(assignments):
