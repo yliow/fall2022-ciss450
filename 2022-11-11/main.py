@@ -87,17 +87,18 @@ def ALL_ASSIGNMENTS(variables):
         v, variables = variables[0], variables[1:]
         if ret == []:
             ret = [[(v, TRUE)], [(v, FALSE)]]
-            print("0 ... ret:", ret)
+            #print("0 ... ret:", ret)
         else:
             tret = []
             for a in ret:
                 #print()
                 #print("0 ...", a)
+                b = a[:] # <-- NOTE
                 a.append((v, TRUE))
-                tret.append(a[:]); a.pop() # <-- NOTE
+                tret.append(a)
                 #print("1 ...", tret)
-                a.append((v, FALSE))
-                tret.append(a[:]) # <-- NOTE
+                b.append((v, FALSE))
+                tret.append(b)
                 #print("2 ...", tret)
             ret = tret
             #print("1 ... ret:", ret)
