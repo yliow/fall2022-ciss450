@@ -87,15 +87,22 @@ def ALL_ASSIGNMENTS(variables):
         v, variables = variables[0], variables[1:]
         if ret == []:
             ret = [[(v, TRUE)], [(v, FALSE)]]
+            print("0 ... ret:", ret)
         else:
             tret = []
             for a in ret:
+                #print()
+                #print("0 ...", a)
                 a.append((v, TRUE))
-                tret.append(a)
+                tret.append(a[:]); a.pop() # <-- NOTE
+                #print("1 ...", tret)
                 a.append((v, FALSE))
-                tret.append(a)
+                tret.append(a[:]) # <-- NOTE
+                #print("2 ...", tret)
             ret = tret
-            
+            #print("1 ... ret:", ret)
+    return ret
+
 def VARS(e):
     X = set()
     VARS_(e, X)
@@ -120,3 +127,4 @@ if __name__ == '__main__':
     variables = VARS(C)
     print(variables)
     all_assignments = ALL_ASSIGNMENTS(variables)
+    print(all_assignments)
