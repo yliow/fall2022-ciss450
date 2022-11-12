@@ -129,3 +129,9 @@ if __name__ == '__main__':
     print(variables)
     all_assignments = ALL_ASSIGNMENTS(variables)
     print(all_assignments)
+
+    all_assignments = ALL_ASSIGNMENTS([Atom("D"), Atom("E"), Atom("F")])
+    print(all_assignments)
+    print(len(all_assignments))
+
+    
