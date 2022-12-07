@@ -27,6 +27,22 @@ class Neuron:
         return self.A(s)
 
 
+class NeuralLayer:
+    def __init__(self, neurons):
+        self.neurons = neurons
+    def __call__(self, *args):
+        return [n(*args) for n in self.neurons]
+
+
+class ANN:
+    def __init__(self, layers):
+        self.layers = layers
+    def __call__(self, *args):
+        for layer in self.layers:
+            args = layer(*args)
+        return args
+
+    
 def test(testcases):
     for w0 in range(-10, 11):
         w0 = w0 / 10.0
@@ -73,3 +89,32 @@ ret = test([(0,0,0),
 print(ret)
 #print(w0, w1, w2)
 #OR = Neuron
+
+print("testing neural layer...")
+
+print("computing NOT_AND model")
+w0, w1, w2 = test([(0,0,0),
+                   (0,1,1),
+                   (1,0,0),
+                   (1,1,0),
+])
+print(w0, w1, w2)
+NOT_AND = Neuron([w0, w1, w2], A)
+
+print("computing AND_NOT model")
+w0, w1, w2 = test([(0,0,0),
+                   (0,1,0),
+                   (1,0,1),
+                   (1,1,0),
+])
+print(w0, w1, w2)
+AND_NOT = Neuron([w0, w1, w2], A)
+
+layer0 = NeuralLayer([AND_NOT, NOT_AND])
+layer1 = NeuralLayer([OR])
+
+XOR = ANN([layer0, layer1])
+print(ann(1, 1))
+print(ann(1, 0))
+print(ann(0, 1))
+print(ann(0, 0))
