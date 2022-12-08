@@ -1,4 +1,6 @@
 import math
+import numpy as np
+import itertools
 
 def S(z):
     return 1.0 / (1.0 + math.exp(-z))
@@ -43,78 +45,112 @@ class ANN:
         return args
 
     
-def test(testcases):
-    for w0 in range(-10, 11):
-        w0 = w0 / 10.0
-        for w1 in range(-10, 11):
-            w1 = w1 / 10.0
-            for w2 in range(-10, 11):
-                w2 = w2 / 10.0
-                
-                n = Neuron([w0, w1, w2], A)
-                found = True
-                for x1, x2, correct in testcases:
-                    if n(x1, x2) != correct:
-                        found = False
-                        break
-                if found:
-                    return w0, w1, w2
-    return None
+def find_neuron(tests, M=1, step=0.1, verbose=False, errorbound=0.0):
+    """
+    If M = 5, step = 0.001, tests weights in [-5, 5] by step of 0.001
+    """
+    n = len(tests[0][0])                                        # number of non-bias weights
+    interval = np.arange(-M, M + step, step)                    # weights for one input
+    cube = itertools.product(*[interval for _ in range(n + 1)]) # (n + 1)-dim cube of all weights
+    for w in cube:
+        if verbose: print("testing weights", w)
+        n = Neuron(w, A)
+        found = True
+        for x, expected in tests:
+            if verbose: print("  testing test case:", x, expected)
+            if abs(n(*x) - expected) > errorbound:
+                found = False
+                break
+        if found:
+            return w
 
-print("computing AND model")
-w0, w1, w2 = test([(0,0,0),
-                   (0,1,0),
-                   (1,0,0),
-                   (1,1,1),
-    ])
-print(w0, w1, w2)
-AND = Neuron([w0, w1, w2], A)
+tests = [((1, 1), 1),
+         ((1, 0), 0),
+         ((0, 1), 0),
+         ((0, 0), 0)]
+ret = find_neuron(tests)
+if ret != None:
+    w0, w1, w2 = ret
+    print("found AND model:", w0, w1, w2)                
+    AND = Neuron([w0, w1, w2], A)
+else:
+    print("ERROR: cannot find AND model")
+    AND = None
 
-print("computing OR model")
-w0, w1, w2 = test([(0,0,0),
-                   (0,1,1),
-                   (1,0,1),
-                   (1,1,1),
-    ])
-print(w0, w1, w2)
-OR = Neuron([w0, w1, w2], A)
+tests = [((1, 1), 1),
+         ((1, 0), 1),
+         ((0, 1), 1),
+         ((0, 0), 0)]
+ret = find_neuron(tests)
+if ret != None:
+    w0, w1, w2 = ret
+    print("found OR model:", w0, w1, w2)                
+    OR = Neuron([w0, w1, w2], A)
+else:
+    print("ERROR: cannot find AND model")
+    OR = None
+
+tests = [((1,), 0),
+         ((0,), 1)]
+ret = find_neuron(tests)
+if ret != None:
+    w0, w1 = ret
+    print("found NOT model:", w0, w1)                
+    NOT = Neuron([w0, w1], A)
+else:
+    print("ERROR: cannot find NOT model")
+    NOT = None
 
 
 print("computing XOR model")
-ret = test([(0,0,0),
-            (0,1,1),
-            (1,0,1),
-            (1,1,0),
-    ])
+ret = find_neuron([((0,0),0),
+                   ((0,1),1),
+                   ((1,0),1),
+                   ((1,1),0),
+])
 print(ret)
 #print(w0, w1, w2)
 #OR = Neuron
 
-print("testing neural layer...")
+#==============================================================================
+# ANN for XOR
+#==============================================================================
 
-print("computing NOT_AND model")
-w0, w1, w2 = test([(0,0,0),
-                   (0,1,1),
-                   (1,0,0),
-                   (1,1,0),
-])
-print(w0, w1, w2)
-NOT_AND = Neuron([w0, w1, w2], A)
+# Find (x,y) -> x * y'
+tests = [((1, 1), 0),
+         ((1, 0), 0),
+         ((0, 1), 1),
+         ((0, 0), 0),
+         ]
+ret = find_neuron(tests)
+if ret != None:
+    w0, w1, w2 = ret
+    print("found NOT_AND model:", w0, w1, w2)                
+    NOT_AND = Neuron([w0, w1, w2], A)
+else:
+    print("ERROR: cannot find NOT_AND model")
+    NOT_AND = None
 
-print("computing AND_NOT model")
-w0, w1, w2 = test([(0,0,0),
-                   (0,1,0),
-                   (1,0,1),
-                   (1,1,0),
-])
-print(w0, w1, w2)
-AND_NOT = Neuron([w0, w1, w2], A)
+# Find (x,y) -> x * y'
+tests = [((1, 1), 0),
+         ((1, 0), 1),
+         ((0, 1), 0),
+         ((0, 0), 0),
+         ]
+ret = find_neuron(tests)
+if ret != None:
+    w0, w1, w2 = ret
+    print("found AND_NOT model:", w0, w1, w2)                
+    AND_NOT = Neuron([w0, w1, w2], A)
+else:
+    print("ERROR: cannot find AND_NOT model")
+    AND_NOT = None
 
 layer0 = NeuralLayer([AND_NOT, NOT_AND])
 layer1 = NeuralLayer([OR])
-
 XOR = ANN([layer0, layer1])
-print(ann(1, 1))
-print(ann(1, 0))
-print(ann(0, 1))
-print(ann(0, 0))
+print("XOR:")
+print(XOR(1, 1))
+print(XOR(1, 0))
+print(XOR(0, 1))
+print(XOR(0, 0))
